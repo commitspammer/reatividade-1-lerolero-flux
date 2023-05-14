@@ -1,9 +1,12 @@
 package com.lerolero.nouns.services;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.time.Duration;
 
 import org.springframework.stereotype.Service;
+
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 @Service
 public class NounService {
@@ -14,14 +17,20 @@ public class NounService {
 		return "Hello " + increment++ + "!";
 	}
 
-	public String randomNoun() {
-		return next();
+	public Mono<String> randomNoun() {
+		return Mono.just(next());
 	}
 
-	public List<String> randomNounList(Integer size) {
-		List<String> list = new ArrayList<>();
-		for (int i = 0; i < size; i++) list.add(next());
-		return list;
+	public Flux<String> randomNounList(Integer size) {
+		return Flux.range(1, size)
+			.map(i -> next())
+			.subscribeOn(Schedulers.boundedElastic());
+	}
+
+	public Flux<String> randomNounProducer(Integer interval) {
+		return Flux.interval(Duration.ofMillis(interval))
+			.map(i -> next())
+			.subscribeOn(Schedulers.parallel());
 	}
 
 }
