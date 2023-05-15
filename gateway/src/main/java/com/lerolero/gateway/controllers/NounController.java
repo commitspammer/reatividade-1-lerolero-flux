@@ -1,4 +1,4 @@
-package com.lerolero.nouns.controllers;
+package com.lerolero.gateway.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 
 import reactor.core.publisher.Flux;
 
-import com.lerolero.nouns.services.NounService;
+import com.lerolero.gateway.services.NounService;
 
 @RestController
 @RequestMapping("/nouns")
@@ -24,8 +24,8 @@ public class NounController {
 	}
 
 	@GetMapping(path = "/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	public Flux<String> subscribe(@RequestParam(defaultValue = "200") Integer interval) {
-		return nounService.randomNounProducer(interval).onBackpressureDrop();
+	public Flux<String> getEvents(@RequestParam(defaultValue = "200") Integer interval) {
+		return nounService.randomNounEvents(interval).onBackpressureDrop();
 	}
 
 }

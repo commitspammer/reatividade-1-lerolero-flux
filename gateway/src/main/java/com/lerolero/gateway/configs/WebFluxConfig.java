@@ -1,4 +1,4 @@
-package com.lerolero.nouns.configs;
+package com.lerolero.gateway.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.CorsRegistry;
