@@ -8,25 +8,25 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
 @Service
-public class NounService {
+public class VerbService {
 
 	private WebClient webClient;
 
 	@Autowired
-	private NounService(@Value("${webservice.nouns.baseurl}") String baseURL) {
+	private VerbService(@Value("${webservice.verbs.baseurl}") String baseURL) {
 		this.webClient = WebClient.create(baseURL);
 	}
 
-	public Flux<String> randomNounList(Integer size) {
+	public Flux<String> randomVerbList(Integer size) {
 		return webClient.get()
-			.uri("/nouns?size=" + size)
+			.uri("/verbs?size=" + size)
 			.retrieve()
 			.bodyToFlux(String.class);
 	}
 
-	public Flux<String> randomNounEvents(Integer interval) {
+	public Flux<String> randomVerbEvents(Integer interval) {
 		return webClient.get()
-			.uri("/nouns/events?interval=" + interval)
+			.uri("/verbs/events?interval=" + interval)
 			.retrieve()
 			.bodyToFlux(String.class);
 	}
