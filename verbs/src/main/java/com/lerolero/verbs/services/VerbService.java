@@ -3,20 +3,24 @@ package com.lerolero.verbs.services;
 import java.time.Duration;
 
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
-import com.lerolero.verbs.repositories.VerbRepository;
+import com.lerolero.verbs.repositories.MongoVerbRepository;
+import com.lerolero.verbs.models.Verb;
 
 @Service
 public class VerbService {
 
-	private VerbRepository repo = new VerbRepository();
+	@Autowired
+	private MongoVerbRepository repo;
 
 	private Mono<String> next() {
-		return repo.pullRandom();
+		return repo.pullRandom()
+			.map(v -> v.getContinuous());
 	}
 
 	public Mono<String> randomVerb() {
