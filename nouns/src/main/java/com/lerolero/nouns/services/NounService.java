@@ -3,20 +3,24 @@ package com.lerolero.nouns.services;
 import java.time.Duration;
 
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
-import com.lerolero.nouns.repositories.NounRepository;
+import com.lerolero.nouns.repositories.MongoNounRepository;
+import com.lerolero.nouns.models.Noun;
 
 @Service
 public class NounService {
 
-	private NounRepository repo = new NounRepository();
+	@Autowired
+	private MongoNounRepository repo;
 
 	private Mono<String> next() {
-		return repo.pullRandom();
+		return repo.pullRandom()
+			.map(n -> n.getPlural());
 	}
 
 	public Mono<String> randomNoun() {
