@@ -3,20 +3,24 @@ package com.lerolero.adverbs.services;
 import java.time.Duration;
 
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
-import com.lerolero.adverbs.repositories.AdverbRepository;
+import com.lerolero.adverbs.repositories.MongoAdverbRepository;
+import com.lerolero.adverbs.models.Adverb;
 
 @Service
 public class AdverbService {
 
-	private AdverbRepository repo = new AdverbRepository();
+	@Autowired
+	private MongoAdverbRepository repo;
 
 	private Mono<String> next() {
-		return repo.pullRandom();
+		return repo.pullRandom()
+			.map(a -> a.getString());
 	}
 
 	public Mono<String> randomAdverb() {
